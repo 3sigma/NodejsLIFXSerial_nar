@@ -12,7 +12,7 @@ var port = "/dev/ttyACM0";
 var sp = new SerialPort(port, {
     baudrate: 115200,
     parser: serialport.parsers.readline("\n")
-});
+}, false); // L'option "false" permet de garder le port fermé pour l'instant
 
 // Evénements pour l'ampoule LIFX
 client.on('light-new', onLightNew);
@@ -35,6 +35,7 @@ function onLightNew(light) {
         // Evénements pour le port série
         // Définis uniquement si l'ampoule qui nous intéresse existe
         if (info.label == "AmpouleBureau") {
+            sp.open();
             sp.on('data', onData);
             sp.on('error', onError);
         }
